@@ -3,7 +3,7 @@
  * This files uses concept from code:
  * https://github.com/mixandjam/Celeste-Movement/blob/master/Assets/Scripts/Movement.cs
  * Copyright (c) 2019 André Cardoso
- * 
+ *
  * Copyright (c) 2024 Louis Mayencourt
  */
 
@@ -15,19 +15,19 @@
 use bevy::ecs::query;
 use bevy::prelude::*;
 
-use crate::player::*;
 use crate::controller::*;
-use crate::physics::{RigidBody, CollideEvent};
+use crate::physics::{CollideEvent, RigidBody};
+use crate::player::*;
 
 const RUNNING_SPEED: f32 = 200.0;
 const JUMP_HEIGHT: f32 = 2.5 * SPRITE_SIZE;
 
 const FALL_SPEED: f32 = 80.0;
 
-pub fn player_movement (
+pub fn player_movement(
     keyboard_input: Res<ButtonInput<KeyCode>>,
     mut query: Query<(&mut RigidBody, &Controller, &mut Player)>,
-    time: Res<Time>
+    time: Res<Time>,
 ) {
     let (mut body, controller, mut player) = query.single_mut();
 
@@ -47,7 +47,7 @@ pub fn player_movement (
             }
             // when in air, gravity applies
             body.acceleration.y = -1500.0;
-        },
+        }
         PlayerAttitude::InWall => {
             player.state = PlayerState::Dead;
             body.velocity = Vec2::ZERO;
@@ -56,10 +56,7 @@ pub fn player_movement (
     }
 }
 
-pub fn collide_event_handler(
-    events: EventReader<CollideEvent>,
-    mut query: Query<&mut Player>,
-) {
+pub fn collide_event_handler(events: EventReader<CollideEvent>, mut query: Query<&mut Player>) {
     if !events.is_empty() {
         info!("End of Game !");
         let mut player = query.single_mut();

@@ -2,15 +2,19 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
-use bevy::{gizmos::{self, aabb::AabbGizmoPlugin}, math::vec2, prelude::*};
+use bevy::{
+    gizmos::{self, aabb::AabbGizmoPlugin},
+    math::vec2,
+    prelude::*,
+};
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
-mod player;
 mod physics;
+mod player;
 mod world;
 
-use player::*;
 use physics::*;
+use player::*;
 use world::*;
 
 fn main() {

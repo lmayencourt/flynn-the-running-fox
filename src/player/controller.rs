@@ -3,7 +3,6 @@
  */
 
 /// Define the controls required to play the game
-
 use bevy::prelude::*;
 
 #[derive(Debug, PartialEq)]
@@ -19,9 +18,9 @@ pub struct Controller {
 }
 
 /// Controller implementation for keyboard
-pub fn keyboard_inputs (
+pub fn keyboard_inputs(
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut query: Query<&mut Controller>
+    mut query: Query<&mut Controller>,
 ) {
     let mut controller = query.single_mut();
 

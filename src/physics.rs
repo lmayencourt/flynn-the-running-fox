@@ -4,6 +4,7 @@
 
 use bevy::math::bounding::{Aabb2d, AabbCast2d, IntersectsVolume, RayCast2d};
 use bevy::prelude::*;
+use bevy::render::deterministic;
 
 use crate::player::{Player, PlayerAttitude, SPRITE_SIZE};
 use crate::world::Ground;
@@ -32,10 +33,7 @@ impl Default for RigidBody {
 #[derive(Event, Default)]
 pub struct CollideEvent;
 
-pub fn BodiesMovement (
-    mut query: Query<(&mut RigidBody, &mut Transform)>,
-    time: Res<Time>,
-) {
+pub fn BodiesMovement(mut query: Query<(&mut RigidBody, &mut Transform)>, time: Res<Time>) {
     for (mut body, mut transform) in query.iter_mut() {
         let delta_t = time.delta_seconds();
         // Apply MRUA equation
@@ -55,7 +53,7 @@ pub fn BodiesMovement (
     }
 }
 
-pub fn collision (
+pub fn collision(
     mut gizmos: Gizmos,
     mut obstacles_query: Query<&Transform, With<Obstacle>>,
     mut player_query: Query<&Transform, With<Player>>,
@@ -63,8 +61,14 @@ pub fn collision (
 ) {
     let player_transform = player_query.single_mut();
     for obstacle in obstacles_query.iter_mut() {
-        let player_box = Aabb2d::new(player_transform.translation.truncate(), player_transform.scale.truncate()/2.0);
-        let obstacle_box = Aabb2d::new(obstacle.translation.truncate(), obstacle.scale.truncate()/2.0);
+        let player_box = Aabb2d::new(
+            player_transform.translation.truncate(),
+            player_transform.scale.truncate() / 2.0,
+        );
+        let obstacle_box = Aabb2d::new(
+            obstacle.translation.truncate(),
+            obstacle.scale.truncate() / 2.0,
+        );
 
         if player_box.intersects(&obstacle_box) {
             collision_events.send_default();

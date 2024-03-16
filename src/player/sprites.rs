@@ -17,7 +17,12 @@ pub struct AnimationTimer(pub Timer);
 
 pub fn animate_sprite(
     time: Res<Time>,
-    mut query: Query<(&AnimationIndices, &mut AnimationTimer, &mut TextureAtlas, &mut Player)>,
+    mut query: Query<(
+        &AnimationIndices,
+        &mut AnimationTimer,
+        &mut TextureAtlas,
+        &mut Player,
+    )>,
 ) {
     for (indices, mut timer, mut atlas, mut player) in &mut query {
         timer.tick(time.delta());
@@ -31,10 +36,10 @@ pub fn animate_sprite(
                         atlas.index + 1
                     };
                 }
-            },
+            }
             PlayerState::Jumping => {
                 atlas.index = 3;
-            },
+            }
             PlayerState::Dead => {
                 atlas.index = 0;
             }
