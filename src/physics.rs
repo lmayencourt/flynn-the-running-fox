@@ -5,8 +5,8 @@
 use bevy::math::bounding::{Aabb2d, IntersectsVolume};
 use bevy::prelude::*;
 
-use crate::player::{Player};
-use crate::Obstacle;
+use crate::player::Player;
+use crate::world::Obstacle;
 
 #[derive(Component)]
 pub struct Collider;
@@ -31,7 +31,17 @@ impl Default for RigidBody {
 #[derive(Event, Default)]
 pub struct CollideEvent;
 
-pub fn bodies_movement(mut query: Query<(&mut RigidBody, &mut Transform)>, time: Res<Time>) {
+pub struct PhysicsPlugin;
+
+impl Plugin for PhysicsPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_event::<CollideEvent>();
+        app.add_systems(FixedUpdate, bodies_movement);
+        app.add_systems(FixedUpdate, collision);
+    }
+}
+
+fn bodies_movement(mut query: Query<(&mut RigidBody, &mut Transform)>, time: Res<Time>) {
     for (mut body, mut transform) in query.iter_mut() {
         let delta_t = time.delta_seconds();
         // Apply MRUA equation
@@ -51,7 +61,7 @@ pub fn bodies_movement(mut query: Query<(&mut RigidBody, &mut Transform)>, time:
     }
 }
 
-pub fn collision(
+fn collision(
     mut obstacles_query: Query<&Transform, With<Obstacle>>,
     mut player_query: Query<&Transform, With<Player>>,
     mut collision_events: EventWriter<CollideEvent>,

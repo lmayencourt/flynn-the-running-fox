@@ -21,7 +21,15 @@ const OBSTACLE_SPEED: f32 = 120.0;
 #[derive(Component)]
 pub struct Obstacle;
 
-pub fn setup(mut commands: Commands) {
+pub struct WorldPlugin;
+
+impl Plugin for WorldPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Startup, setup);
+    }
+}
+
+fn setup(mut commands: Commands) {
     // Create the first obstacles
     spawn_obstacle(&mut commands, 350.0);
 }

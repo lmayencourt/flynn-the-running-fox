@@ -8,7 +8,7 @@ pub mod controller;
 pub mod movement;
 pub mod sprites;
 
-use crate::{physics::Collider, RigidBody};
+use crate::physics::{Collider, RigidBody};
 
 use controller::*;
 use sprites::*;
@@ -34,7 +34,19 @@ pub enum PlayerAttitude {
     InWall,
 }
 
-pub fn setup(
+pub struct PlayerPlugin;
+
+impl Plugin for PlayerPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Startup, setup);
+        app.add_systems(FixedUpdate, controller::keyboard_inputs);
+        app.add_systems(FixedUpdate, movement::player_movement);
+        app.add_systems(FixedUpdate, movement::collide_event_handler);
+        app.add_systems(Update, sprites::animate_sprite);
+    }
+}
+
+fn setup(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
