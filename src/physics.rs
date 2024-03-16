@@ -29,6 +29,9 @@ impl Default for RigidBody {
     }
 }
 
+#[derive(Event, Default)]
+pub struct CollideEvent;
+
 pub fn BodiesMovement (
     mut query: Query<(&mut RigidBody, &mut Transform)>,
     time: Res<Time>,
@@ -55,16 +58,16 @@ pub fn BodiesMovement (
 pub fn collision (
     mut gizmos: Gizmos,
     mut obstacles_query: Query<&Transform, With<Obstacle>>,
-    mut player_query: Query<(&Transform, &mut Player)>,
+    mut player_query: Query<&Transform, With<Player>>,
+    mut collision_events: EventWriter<CollideEvent>,
 ) {
-    let (player_transform, mut player) = player_query.single_mut();
+    let player_transform = player_query.single_mut();
     for obstacle in obstacles_query.iter_mut() {
         let player_box = Aabb2d::new(player_transform.translation.truncate(), player_transform.scale.truncate()/2.0);
         let obstacle_box = Aabb2d::new(obstacle.translation.truncate(), obstacle.scale.truncate()/2.0);
 
         if player_box.intersects(&obstacle_box) {
-            info!("Game done !");
-            player.attitude = PlayerAttitude::InWall;
+            collision_events.send_default();
         }
     }
 }

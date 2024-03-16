@@ -17,7 +17,7 @@ use bevy::prelude::*;
 
 use crate::player::*;
 use crate::controller::*;
-use crate::RigidBody;
+use crate::physics::{RigidBody, CollideEvent};
 
 const RUNNING_SPEED: f32 = 200.0;
 const JUMP_HEIGHT: f32 = 2.5 * SPRITE_SIZE;
@@ -53,5 +53,16 @@ pub fn player_movement (
             body.velocity = Vec2::ZERO;
             body.acceleration = Vec2::ZERO;
         }
+    }
+}
+
+pub fn collide_event_handler(
+    events: EventReader<CollideEvent>,
+    mut query: Query<&mut Player>,
+) {
+    if !events.is_empty() {
+        info!("End of Game !");
+        let mut player = query.single_mut();
+        player.attitude = PlayerAttitude::InWall;
     }
 }
