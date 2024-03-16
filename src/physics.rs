@@ -2,8 +2,8 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
-use bevy::math::bounding::{Aabb2d, IntersectsVolume};
-use bevy::prelude::*;
+use bevy::math::bounding::{Aabb2d, BoundingVolume, IntersectsVolume};
+use bevy::{gizmos, prelude::*};
 
 use crate::player::Player;
 use crate::world::Obstacle;
@@ -62,12 +62,14 @@ fn collision(
     mut obstacles_query: Query<&Transform, With<Obstacle>>,
     mut player_query: Query<&Transform, With<Player>>,
     mut collision_events: EventWriter<CollideEvent>,
+    mut gizmos: Gizmos,
 ) {
     let player_transform = player_query.single_mut();
     for obstacle in obstacles_query.iter_mut() {
         let player_box = Aabb2d::new(
-            player_transform.translation.truncate(),
-            player_transform.scale.truncate() / 2.0,
+            // Adapt the collision box as the transform seems way bigger than necessary
+            player_transform.translation.truncate() - Vec2::Y*24.0,
+            player_transform.scale.truncate() * 6.0,
         );
         let obstacle_box = Aabb2d::new(
             obstacle.translation.truncate(),
@@ -77,5 +79,7 @@ fn collision(
         if player_box.intersects(&obstacle_box) {
             collision_events.send_default();
         }
+
+        gizmos.rect_2d(player_box.center(), 0.0, player_box.half_size() *2.0, Color::GRAY);
     }
 }
