@@ -37,20 +37,21 @@ pub fn player_movement (
     info!("Player attitude {:?}", player.attitude);
     info!("Control state {:?}", controller.direction);
     match player.attitude {
-        PlayerAttitude::Grounded => {
+        PlayerAttitude::InAir => {
             player.state = PlayerState::Running;
-            body.acceleration.y = 0.0;
-            body.velocity.y = 0.0;
 
             // Can only jump if on the ground
             if controller.action == Action::Jump {
                 player.state = PlayerState::Jumping;
-                body.velocity.y = 100.0;
+                body.velocity.y = 450.0;
             }
-        },
-        PlayerAttitude::InAir => {
             // when in air, gravity applies
-            body.acceleration.y = -200.0;
+            body.acceleration.y = -1500.0;
         },
+        PlayerAttitude::InWall => {
+            player.state = PlayerState::Dead;
+            body.velocity = Vec2::ZERO;
+            body.acceleration = Vec2::ZERO;
+        }
     }
 }

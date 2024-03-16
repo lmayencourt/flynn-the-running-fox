@@ -35,6 +35,9 @@ pub fn animate_sprite(
             PlayerState::Jumping => {
                 atlas.index = 3;
             },
+            PlayerState::Dead => {
+                atlas.index = 0;
+            }
         }
     }
 }

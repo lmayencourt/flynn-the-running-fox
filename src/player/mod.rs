@@ -26,12 +26,13 @@ pub struct Player {
 enum PlayerState {
     Running,
     Jumping,
+    Dead,
 }
 
 #[derive(Debug)]
 pub enum PlayerAttitude {
-    Grounded,
     InAir,
+    InWall,
 }
 
 pub fn setup(
@@ -60,7 +61,7 @@ pub fn setup(
         AnimationTimer(Timer::from_seconds(0.1, TimerMode::Repeating)),
         Player{
             state:PlayerState::Running,
-            attitude:PlayerAttitude::Grounded,
+            attitude:PlayerAttitude::InAir,
             jump_timer:Timer::from_seconds(0.4, TimerMode::Repeating)
         },
         Controller{direction:Vec2::ZERO, action:Action::None},
@@ -69,6 +70,6 @@ pub fn setup(
             position: Vec2::new(0.0, 40.0),
             ..default()
         },
-        // ShowAabbGizmo{color:None},
+        ShowAabbGizmo{color:None},
     ));
 }

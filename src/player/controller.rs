@@ -25,14 +25,6 @@ pub fn keyboard_inputs (
 ) {
     let mut controller = query.single_mut();
 
-    if keyboard_input.pressed(KeyCode::ArrowLeft) {
-        controller.direction = Vec2::NEG_X;
-    } else if keyboard_input.pressed(KeyCode::ArrowRight) {
-        controller.direction = Vec2::X;
-    } else {
-        controller.direction = Vec2::ZERO;
-    }
-
     if keyboard_input.pressed(KeyCode::Space) || keyboard_input.pressed(KeyCode::ArrowUp) {
         // controller.direction.y = 1.0;
         controller.action = Action::Jump;

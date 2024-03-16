@@ -2,11 +2,12 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
-use bevy::math::bounding::{Aabb2d, RayCast2d};
+use bevy::math::bounding::{Aabb2d, AabbCast2d, IntersectsVolume, RayCast2d};
 use bevy::prelude::*;
 
 use crate::player::{Player, PlayerAttitude, SPRITE_SIZE};
 use crate::world::Ground;
+use crate::Obstacle;
 
 #[derive(Component)]
 pub struct Collider;
@@ -53,32 +54,17 @@ pub fn BodiesMovement (
 
 pub fn collision (
     mut gizmos: Gizmos,
-    mut ground_query: Query<(&Transform), (With<Collider>, With<Ground>)>,
+    mut obstacles_query: Query<&Transform, With<Obstacle>>,
     mut player_query: Query<(&Transform, &mut Player)>,
 ) {
     let (player_transform, mut player) = player_query.single_mut();
-    for ground in ground_query.iter_mut() {
+    for obstacle in obstacles_query.iter_mut() {
+        let player_box = Aabb2d::new(player_transform.translation.truncate(), player_transform.scale.truncate()/2.0);
+        let obstacle_box = Aabb2d::new(obstacle.translation.truncate(), obstacle.scale.truncate()/2.0);
 
-        // let player_box = Aabb2d::new(player_transform.translation.truncate(), player_transform.scale.truncate()/2.0);
-        let ground_box = Aabb2d::new(ground.translation.truncate(), ground.scale.truncate()/2.0);
-
-        // A ray is an infinitely long line 
-        let ground_ray = Ray2d::new(player_transform.translation.truncate(), Vec2::NEG_Y);
-        // Ray cat have uses the origin and direction from ray, but have a finite length
-        let ray_cast = RayCast2d::from_ray(ground_ray, SPRITE_SIZE * player_transform.scale.y/2.0);
-
-        if let Some(point) = ray_cast.aabb_intersection_at(&ground_box) {
-            info!("Collision on ray at {}", point);
-            player.attitude = PlayerAttitude::Grounded;
-
-            gizmos.circle_2d(ray_cast.ray.origin + *ray_cast.ray.direction * point, 10.0, Color::RED);
-            break;
-        } else {
-            player.attitude = PlayerAttitude::InAir;
+        if player_box.intersects(&obstacle_box) {
+            info!("Game done !");
+            player.attitude = PlayerAttitude::InWall;
         }
-
-        // Debug physics by displaying gizmos line
-        gizmos.ray_2d(ground_ray.origin, *ground_ray.direction * ray_cast.max, Color::GRAY);
-        // gizmos.line_2d(ray_cast.ray.origin, ray_cast.ray.origin + *ray_cast.ray.direction * ray_cast.max, Color::GRAY);
     }
 }
