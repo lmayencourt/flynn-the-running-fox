@@ -68,7 +68,7 @@ fn collision(
     for obstacle in obstacles_query.iter_mut() {
         let player_box = Aabb2d::new(
             // Adapt the collision box as the transform seems way bigger than necessary
-            player_transform.translation.truncate() - Vec2::Y*24.0,
+            player_transform.translation.truncate(),
             player_transform.scale.truncate() * 6.0,
         );
         let obstacle_box = Aabb2d::new(
@@ -80,6 +80,6 @@ fn collision(
             collision_events.send_default();
         }
 
-        gizmos.rect_2d(player_box.center(), 0.0, player_box.half_size() *2.0, Color::GRAY);
+        // gizmos.rect_2d(player_box.center(), 0.0, player_box.half_size() *2.0, Color::GRAY);
     }
 }

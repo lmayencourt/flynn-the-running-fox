@@ -19,7 +19,7 @@ fn main() {
     println!("Flappy bird made with Bevy!");
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest())) // prevents blurry sprites
-        .add_plugins(WorldInspectorPlugin::new())
+        // .add_plugins(WorldInspectorPlugin::new())
         .add_systems(Update, bevy::window::close_on_esc)
         // Custom plugin and systems
         .add_plugins(WorldPlugin)

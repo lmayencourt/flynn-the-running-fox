@@ -97,7 +97,6 @@ fn spawn_obstacle(commands: &mut Commands, gap_position: f32) {
         },
         Obstacle,
         Collider,
-        ShowAabbGizmo { color: None },
         RigidBody {
             // Constant speed, no gravity
             position: Vec2::new(WORLD_RIGHT, top_wall_y_pos),
@@ -121,7 +120,6 @@ fn spawn_obstacle(commands: &mut Commands, gap_position: f32) {
         },
         Obstacle,
         Collider,
-        ShowAabbGizmo { color: None },
         RigidBody {
             // Constant speed, no gravity
             position: Vec2::new(WORLD_RIGHT, bottom_wall_y_pos),

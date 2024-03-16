@@ -13,7 +13,8 @@ use crate::physics::{Collider, RigidBody};
 use controller::*;
 use sprites::*;
 
-pub const SPRITE_SIZE: f32 = 24.0;
+pub const SPRITE_HEIGHT: f32 = 12.0;
+pub const SPRITE_WIDTH: f32 = 24.0;
 
 #[derive(Component)]
 pub struct Player {
@@ -53,7 +54,7 @@ fn setup(
 ) {
     let texture = asset_server.load("fox.png");
     let layout =
-        TextureAtlasLayout::from_grid(Vec2::new(SPRITE_SIZE, SPRITE_SIZE), 6, 1, None, None);
+        TextureAtlasLayout::from_grid(Vec2::new(SPRITE_WIDTH, SPRITE_HEIGHT), 6, 1, None, Some(Vec2::new(0.0, 12.0)));
     let texture_atlas_layout = texture_atlas_layouts.add(layout);
     // Use only the subset of sprites in the sheet that make up the run animation
     let animation_indices = AnimationIndices { first: 0, last: 5 };
@@ -84,6 +85,6 @@ fn setup(
             position: Vec2::new(0.0, 40.0),
             ..default()
         },
-        ShowAabbGizmo { color: None },
+        // ShowAabbGizmo { color: None },
     ));
 }

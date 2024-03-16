@@ -2,7 +2,7 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
-use bevy::prelude::*;
+use bevy::{prelude::*, transform};
 
 use crate::player::*;
 
@@ -22,9 +22,10 @@ pub fn animate_sprite(
         &mut AnimationTimer,
         &mut TextureAtlas,
         &mut Player,
+        &mut Transform,
     )>,
 ) {
-    for (indices, mut timer, mut atlas, player) in &mut query {
+    for (indices, mut timer, mut atlas, player, mut transform) in &mut query {
         timer.tick(time.delta());
 
         match player.state {
@@ -42,6 +43,7 @@ pub fn animate_sprite(
             }
             PlayerState::Dead => {
                 atlas.index = 0;
+                transform.rotation = Quat::from_rotation_x(std::f32::consts::PI);
             }
         }
     }
