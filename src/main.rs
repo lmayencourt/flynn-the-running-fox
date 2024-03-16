@@ -27,5 +27,6 @@ fn main() {
         .add_systems(FixedUpdate, physics::BodiesMovement)
         .add_systems(FixedUpdate, physics::collision)
         .add_systems(Update, player::sprites::animate_sprite)
+        .add_systems(Update, bevy::window::close_on_esc)
         .run();
 }
