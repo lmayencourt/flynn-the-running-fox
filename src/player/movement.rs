@@ -12,26 +12,15 @@
  * - https://www.youtube.com/watch?v=STyY26a_dPY
  */
 
-use bevy::ecs::query;
 use bevy::prelude::*;
 
-use crate::controller::*;
-use crate::physics::{CollideEvent, RigidBody};
+use crate::physics::{CollideEvent};
 use crate::player::*;
 
-const RUNNING_SPEED: f32 = 200.0;
-const JUMP_HEIGHT: f32 = 2.5 * SPRITE_SIZE;
-
-const FALL_SPEED: f32 = 80.0;
-
 pub fn player_movement(
-    keyboard_input: Res<ButtonInput<KeyCode>>,
     mut query: Query<(&mut RigidBody, &Controller, &mut Player)>,
-    time: Res<Time>,
 ) {
     let (mut body, controller, mut player) = query.single_mut();
-
-    body.velocity.x = controller.direction.x * RUNNING_SPEED;
 
     info!("Player state {:?}", player.state);
     info!("Player attitude {:?}", player.attitude);

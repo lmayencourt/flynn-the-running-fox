@@ -2,12 +2,10 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
-use bevy::math::bounding::{Aabb2d, AabbCast2d, IntersectsVolume, RayCast2d};
+use bevy::math::bounding::{Aabb2d, IntersectsVolume};
 use bevy::prelude::*;
-use bevy::render::deterministic;
 
-use crate::player::{Player, PlayerAttitude, SPRITE_SIZE};
-use crate::world::Ground;
+use crate::player::{Player};
 use crate::Obstacle;
 
 #[derive(Component)]
@@ -33,7 +31,7 @@ impl Default for RigidBody {
 #[derive(Event, Default)]
 pub struct CollideEvent;
 
-pub fn BodiesMovement(mut query: Query<(&mut RigidBody, &mut Transform)>, time: Res<Time>) {
+pub fn bodies_movement(mut query: Query<(&mut RigidBody, &mut Transform)>, time: Res<Time>) {
     for (mut body, mut transform) in query.iter_mut() {
         let delta_t = time.delta_seconds();
         // Apply MRUA equation
@@ -54,7 +52,6 @@ pub fn BodiesMovement(mut query: Query<(&mut RigidBody, &mut Transform)>, time: 
 }
 
 pub fn collision(
-    mut gizmos: Gizmos,
     mut obstacles_query: Query<&Transform, With<Obstacle>>,
     mut player_query: Query<&Transform, With<Player>>,
     mut collision_events: EventWriter<CollideEvent>,

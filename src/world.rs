@@ -19,9 +19,6 @@ const OBSTACLE_WIDTH: f32 = 20.0;
 const OBSTACLE_SPEED: f32 = 120.0;
 
 #[derive(Component)]
-pub struct Ground;
-
-#[derive(Component)]
 pub struct Obstacle;
 
 pub fn setup(mut commands: Commands) {

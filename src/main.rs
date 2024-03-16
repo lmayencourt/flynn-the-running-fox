@@ -3,8 +3,6 @@
  */
 
 use bevy::{
-    gizmos::{self, aabb::AabbGizmoPlugin},
-    math::vec2,
     prelude::*,
 };
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
@@ -14,7 +12,6 @@ mod player;
 mod world;
 
 use physics::*;
-use player::*;
 use world::*;
 
 fn main() {
@@ -29,7 +26,7 @@ fn main() {
         .add_event::<physics::CollideEvent>()
         .add_systems(FixedUpdate, player::controller::keyboard_inputs)
         .add_systems(FixedUpdate, player::movement::player_movement)
-        .add_systems(FixedUpdate, physics::BodiesMovement)
+        .add_systems(FixedUpdate, physics::bodies_movement)
         .add_systems(FixedUpdate, physics::collision)
         .add_systems(FixedUpdate, player::movement::collide_event_handler)
         .add_systems(Update, player::sprites::animate_sprite)

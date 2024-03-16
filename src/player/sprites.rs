@@ -24,7 +24,7 @@ pub fn animate_sprite(
         &mut Player,
     )>,
 ) {
-    for (indices, mut timer, mut atlas, mut player) in &mut query {
+    for (indices, mut timer, mut atlas, player) in &mut query {
         timer.tick(time.delta());
 
         match player.state {

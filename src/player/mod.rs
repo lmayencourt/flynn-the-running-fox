@@ -19,7 +19,6 @@ pub const SPRITE_SIZE: f32 = 24.0;
 pub struct Player {
     state: PlayerState,
     pub attitude: PlayerAttitude,
-    jump_timer: Timer,
 }
 
 #[derive(Debug)]
@@ -62,7 +61,7 @@ pub fn setup(
         Player {
             state: PlayerState::Running,
             attitude: PlayerAttitude::InAir,
-            jump_timer: Timer::from_seconds(0.4, TimerMode::Repeating),
+            // jump_timer: Timer::from_seconds(0.4, TimerMode::Repeating),
         },
         Controller {
             direction: Vec2::ZERO,
