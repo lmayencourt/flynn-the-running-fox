@@ -55,9 +55,6 @@ fn bodies_movement(mut query: Query<(&mut RigidBody, &mut Transform)>, time: Res
         // Apply the new position to the sprite
         transform.translation.x = body.position.x;
         transform.translation.y = body.position.y;
-
-        // info!("New RigidBody pos is {}, {}", transform.translation.x, transform.translation.y);
-        info!("New RigidBody is {:?}", body);
     }
 }
 

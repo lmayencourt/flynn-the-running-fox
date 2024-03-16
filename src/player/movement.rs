@@ -22,9 +22,9 @@ pub fn player_movement(
 ) {
     let (mut body, controller, mut player) = query.single_mut();
 
-    info!("Player state {:?}", player.state);
-    info!("Player attitude {:?}", player.attitude);
-    info!("Control state {:?}", controller.direction);
+    debug!("Player state {:?}", player.state);
+    debug!("Player attitude {:?}", player.attitude);
+    debug!("Control state {:?}", controller.direction);
     match player.attitude {
         PlayerAttitude::InAir => {
             player.state = PlayerState::Running;
