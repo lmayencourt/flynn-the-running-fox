@@ -4,7 +4,7 @@
 
 use bevy::prelude::*;
 
-use crate::physics::Collider;
+use crate::physics::{Collider, RigidBody};
 
 const GROUND_HEIGHT: f32 = 20.0;
 const GROUND_SIZE: Vec3 = Vec3::new(800.0, GROUND_HEIGHT, 0.0);
@@ -49,5 +49,6 @@ pub fn setup(
         },
         ..default()
     },
-    Obstacle));
+    Obstacle,
+    ));
 }

@@ -24,6 +24,7 @@ fn main() {
         .add_systems(Startup, player::setup)
         .add_systems(FixedUpdate, player::controller::keyboard_inputs)
         .add_systems(FixedUpdate, player::movement::player_movement)
+        .add_systems(FixedUpdate, physics::BodiesMovement)
         .add_systems(FixedUpdate, physics::collision)
         .add_systems(Update, player::sprites::animate_sprite)
         .run();

@@ -17,6 +17,7 @@ use bevy::prelude::*;
 
 use crate::player::*;
 use crate::controller::*;
+use crate::RigidBody;
 
 const RUNNING_SPEED: f32 = 200.0;
 const JUMP_HEIGHT: f32 = 2.5 * SPRITE_SIZE;
@@ -25,12 +26,12 @@ const FALL_SPEED: f32 = 80.0;
 
 pub fn player_movement (
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    mut query: Query<(&mut Transform, &Controller, &mut Player)>,
+    mut query: Query<(&mut RigidBody, &Controller, &mut Player)>,
     time: Res<Time>
 ) {
-    let (mut transform, controller, mut player) = query.single_mut();
+    let (mut body, controller, mut player) = query.single_mut();
 
-    transform.translation.x += controller.direction.x * RUNNING_SPEED * time.delta_seconds();
+    body.velocity.x = controller.direction.x * RUNNING_SPEED;
 
     info!("Player state {:?}", player.state);
     info!("Player attitude {:?}", player.attitude);
@@ -38,16 +39,18 @@ pub fn player_movement (
     match player.attitude {
         PlayerAttitude::Grounded => {
             player.state = PlayerState::Running;
+            body.acceleration.y = 0.0;
+            body.velocity.y = 0.0;
 
             // Can only jump if on the ground
             if controller.action == Action::Jump {
                 player.state = PlayerState::Jumping;
-                transform.translation.y += JUMP_HEIGHT;
+                body.velocity.y = 100.0;
             }
         },
         PlayerAttitude::InAir => {
             // when in air, gravity applies
-            transform.translation.y += -FALL_SPEED * time.delta_seconds();
+            body.acceleration.y = -200.0;
         },
     }
 }

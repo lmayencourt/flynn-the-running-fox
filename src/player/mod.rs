@@ -8,7 +8,7 @@ pub mod controller;
 pub mod movement;
 pub mod sprites;
 
-use crate::physics::Collider;
+use crate::{physics::Collider, RigidBody};
 
 use sprites::*;
 use controller::*;
@@ -65,6 +65,10 @@ pub fn setup(
         },
         Controller{direction:Vec2::ZERO, action:Action::None},
         Collider,
-        ShowAabbGizmo{color:None},
+        RigidBody {
+            position: Vec2::new(0.0, 40.0),
+            ..default()
+        },
+        // ShowAabbGizmo{color:None},
     ));
 }
