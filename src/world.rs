@@ -4,16 +4,18 @@
 
 use bevy::prelude::*;
 
+use crate::physics::Collider;
+
 const GROUND_HEIGHT: f32 = 20.0;
 const GROUND_SIZE: Vec3 = Vec3::new(800.0, GROUND_HEIGHT, 0.0);
 
 const OBSTACLE_SIZE: Vec3 = Vec3::new(20.0, 20.0, 0.0);
 
 #[derive(Component)]
-struct Ground;
+pub struct Ground;
 
 #[derive(Component)]
-struct Obstacle;
+pub struct Obstacle;
 
 pub fn setup(
     mut commands: Commands,
@@ -31,7 +33,8 @@ pub fn setup(
         },
         ..default()
     },
-    Ground));
+    Ground,
+    Collider));
 
     // Obstacle
     commands.spawn((SpriteBundle {
