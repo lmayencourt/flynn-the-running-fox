@@ -67,7 +67,6 @@ fn collision(
     let player_transform = player_query.single_mut();
     for obstacle in obstacles_query.iter_mut() {
         let player_box = Aabb2d::new(
-            // Adapt the collision box as the transform seems way bigger than necessary
             player_transform.translation.truncate(),
             player_transform.scale.truncate() * 6.0,
         );
