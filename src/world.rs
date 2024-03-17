@@ -5,7 +5,7 @@
 use bevy::prelude::*;
 use rand::prelude::*;
 
-use crate::physics::{Collider, RigidBody};
+use crate::{physics::{Collider, RigidBody}, ApplicationState};
 
 /// World size definition
 const WORLD_HEIGHT: f32 = 800.0;
@@ -36,15 +36,10 @@ pub struct WorldPlugin;
 
 impl Plugin for WorldPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup);
         app.insert_resource(ObstacleSpawnTimer{timer: Timer::from_seconds(OBSTACLE_SPAWN_SPEED, TimerMode::Repeating)});
-        app.add_systems(FixedUpdate, update_world);
+        app.add_systems(FixedUpdate, update_world
+            .run_if(in_state(ApplicationState::InGame)));
     }
-}
-
-fn setup(mut commands: Commands) {
-    // Create the first obstacles
-    spawn_obstacle(&mut commands, 350.0);
 }
 
 fn update_world(

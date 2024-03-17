@@ -45,10 +45,15 @@ pub fn player_movement(
     }
 }
 
-pub fn collide_event_handler(events: EventReader<CollideEvent>, mut query: Query<&mut Player>) {
+pub fn collide_event_handler(
+    events: EventReader<CollideEvent>,
+    mut query: Query<&mut Player>,
+    mut next_state: ResMut<NextState<ApplicationState>>,
+) {
     if !events.is_empty() {
         info!("End of Game !");
         let mut player = query.single_mut();
         player.attitude = PlayerAttitude::InWall;
+        next_state.set(ApplicationState::GameEnd);
     }
 }
