@@ -2,6 +2,8 @@
 
 "In the frosty peaks of a majestic mountain range, there lived a spirited snow fox named Flynn. When a dark force threatened to engulf the mountain in eternal winter, Flynn embarked on a daring quest to restore balance. Guided by ancient legends and aided by newfound allies, Flynn starts is journey to brave treacherous obstacles to uncover the source of the darkness..."
 
+Help Flynn on his journey by playing the game [online](https://lmayencourt.github.io/flynn-the-running-fox/) !
+
 ## Tools used
 - [Rust](https://www.rust-lang.org) as a development language.
 - [bevy engine](https://bevyengine.org) as game engine.
