@@ -24,6 +24,7 @@ const OBSTACLE_WIDTH: f32 = 20.0;
 const OBSTACLE_SPEED: f32 = 120.0;
 
 const OBSTACLE_SPAWN_SPEED: f32 = 2.0;
+const OBSTACLE_DESPAWN_SPEED: f32 = 0.20;
 
 // const OBSTACLE_
 
@@ -34,6 +35,12 @@ pub struct Obstacle;
 struct ObstacleSpawnTimer {
     timer: Timer,
 }
+
+#[derive(Resource)]
+struct ObstacleDespawnTimer {
+    timer: Timer,
+}
+
 pub struct WorldPlugin;
 
 impl Plugin for WorldPlugin {
@@ -41,9 +48,16 @@ impl Plugin for WorldPlugin {
         app.insert_resource(ObstacleSpawnTimer {
             timer: Timer::from_seconds(OBSTACLE_SPAWN_SPEED, TimerMode::Repeating),
         });
+        app.insert_resource(ObstacleDespawnTimer {
+            timer: Timer::from_seconds(OBSTACLE_DESPAWN_SPEED, TimerMode::Repeating),
+        });
         app.add_systems(
             FixedUpdate,
             update_world.run_if(in_state(ApplicationState::InGame)),
+        );
+        app.add_systems(
+            Update,
+            clear_world.run_if(in_state(ApplicationState::GameEnd))
         );
     }
 }
@@ -70,6 +84,21 @@ fn update_world(
             gap_pos = WORLD_HEIGHT - OBSTACLE_GAP_SIZE;
         }
         spawn_obstacle(&mut commands, gap_pos);
+    }
+}
+
+fn clear_world(
+    mut commands: Commands,
+    mut query: Query<Entity, With<Obstacle>>,
+    mut despawn_timer: ResMut<ObstacleDespawnTimer>,
+    time: Res<Time>,
+) {
+    despawn_timer.timer.tick(time.delta());
+    if despawn_timer.timer.finished() {
+        for entity in query.iter() {
+            commands.entity(entity).despawn();
+            break;
+        }
     }
 }
 
