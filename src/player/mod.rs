@@ -70,7 +70,7 @@ fn setup(
     asset_server: Res<AssetServer>,
     mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
 ) {
-    let texture = asset_server.load("fox.png");
+    let texture = asset_server.load("snow-fox.png");
     let layout =
         TextureAtlasLayout::from_grid(Vec2::new(SPRITE_WIDTH, SPRITE_HEIGHT), 6, 1, None, None);
     let texture_atlas_layout = texture_atlas_layouts.add(layout);
