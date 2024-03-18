@@ -52,6 +52,6 @@ pub fn collide_event_handler(
         info!("End of Game !");
         let mut player = query.single_mut();
         player.attitude = PlayerAttitude::InWall;
-        next_state.set(ApplicationState::GameEnd);
+        next_state.set(ApplicationState::GameEnding);
     }
 }

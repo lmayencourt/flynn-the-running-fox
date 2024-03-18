@@ -10,7 +10,7 @@ pub mod sprites;
 
 use crate::{
     physics::{Collider, RigidBody},
-    ApplicationState,
+    ApplicationState, RestartEvent,
 };
 
 use controller::*;
@@ -43,6 +43,10 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup);
+        app.add_systems(
+            Update,
+            restart_event_handler.run_if(in_state(ApplicationState::GameEnd))
+        );
         app.add_systems(
             FixedUpdate,
             controller::keyboard_inputs.run_if(in_state(ApplicationState::InGame)),
@@ -99,4 +103,14 @@ fn setup(
         },
         // ShowAabbGizmo { color: None },
     ));
+}
+
+pub fn restart_event_handler(
+    events: EventReader<RestartEvent>,
+    mut query: Query<&mut Player>,
+) {
+    if !events.is_empty() {
+        let mut player = query.single_mut();
+        player.attitude = PlayerAttitude::InAir;
+    }
 }

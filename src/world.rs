@@ -57,7 +57,7 @@ impl Plugin for WorldPlugin {
         );
         app.add_systems(
             Update,
-            clear_world.run_if(in_state(ApplicationState::GameEnd))
+            clear_world.run_if(in_state(ApplicationState::GameEnding))
         );
     }
 }
@@ -91,6 +91,7 @@ fn clear_world(
     mut commands: Commands,
     mut query: Query<Entity, With<Obstacle>>,
     mut despawn_timer: ResMut<ObstacleDespawnTimer>,
+    mut next_state: ResMut<NextState<ApplicationState>>,
     time: Res<Time>,
 ) {
     despawn_timer.timer.tick(time.delta());
@@ -99,6 +100,10 @@ fn clear_world(
             commands.entity(entity).despawn();
             break;
         }
+    }
+
+    if query.is_empty() {
+        next_state.set(ApplicationState::GameEnd);
     }
 }
 

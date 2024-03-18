@@ -30,6 +30,7 @@ pub fn animate_sprite(
 
         match player.state {
             PlayerState::Running => {
+                transform.rotation = Quat::from_rotation_x(0.0);
                 if timer.just_finished() {
                     atlas.index = if atlas.index == indices.last {
                         indices.first

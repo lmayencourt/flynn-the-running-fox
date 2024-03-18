@@ -16,11 +16,15 @@ use world::WorldPlugin;
 enum ApplicationState {
     LandingScreen,
     InGame,
+    GameEnding,
     GameEnd,
 }
 
 #[derive(Component)]
 struct MenuText;
+
+#[derive(Event, Default)]
+pub struct RestartEvent;
 
 fn main() {
     println!("Flappy bird made with Bevy!");
@@ -30,6 +34,7 @@ fn main() {
         .add_systems(Update, bevy::window::close_on_esc)
         // Custom plugin and systems
         .insert_state(ApplicationState::LandingScreen)
+        .add_event::<RestartEvent>()
         .add_systems(Startup, menu_setup)
         .add_systems(Update, menu_control)
         .add_plugins(WorldPlugin)
@@ -55,6 +60,7 @@ fn menu_control(
     mut next_state: ResMut<NextState<ApplicationState>>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
     mut query: Query<&mut Text, With<MenuText>>,
+    mut event: EventWriter<RestartEvent>,
 ) {
     match state.get() {
         ApplicationState::LandingScreen => {
@@ -66,12 +72,17 @@ fn menu_control(
             let mut text = query.single_mut();
             text.sections[0].value = "".to_string();
         }
-        ApplicationState::GameEnd => {
+        ApplicationState::GameEnding => {
             let mut text = query.single_mut();
             text.sections[0].value = "You died...".to_string();
+        }
+        ApplicationState::GameEnd => {
+            let mut text = query.single_mut();
+            text.sections[0].value = "Press \"Space\" to restart!".to_string();
 
             if keyboard_input.pressed(KeyCode::Space) {
                 next_state.set(ApplicationState::InGame);
+                event.send_default();
             }
         }
     }
