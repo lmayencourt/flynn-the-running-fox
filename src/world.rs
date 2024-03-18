@@ -6,7 +6,7 @@ use bevy::{prelude::*, text};
 
 use crate::{
     physics::{Collider, RigidBody, CollideEvent, CollideWith},
-    ApplicationState,
+    ApplicationState, RestartEvent
 };
 
 /// World size definition
@@ -76,6 +76,10 @@ impl Plugin for WorldPlugin {
             Update,
             collide_event_handler.run_if(in_state(ApplicationState::InGame)),
         );
+        app.add_systems(
+            Update,
+            restart_event_handler.run_if(in_state(ApplicationState::GameEnd))
+        );
     }
 }
 
@@ -134,6 +138,8 @@ fn setup_world(mut commands: Commands) {
 fn update_world(
     mut commands: Commands,
     mut obstacles_query: Query<(&Transform, Entity), With<Obstacle>>,
+    mut scorebard: ResMut<ScoreBoard>,
+    mut query: Query<&mut Text, With<ScoreBoardUi>>,
     mut spawn_timer: ResMut<ObstacleSpawnTimer>,
     time: Res<Time>,
 ) {
@@ -154,6 +160,9 @@ fn update_world(
         }
         spawn_obstacle(&mut commands, gap_pos);
     }
+
+    let mut text = query.single_mut();
+    text.sections[1].value = scorebard.score.to_string();
 }
 
 fn clear_world(
@@ -258,15 +267,19 @@ fn spawn_obstacle(commands: &mut Commands, gap_position: f32) {
 fn collide_event_handler(
     mut events: EventReader<CollideEvent>,
     mut scorebard: ResMut<ScoreBoard>,
-    mut query: Query<&mut Text, With<ScoreBoardUi>>,
     mut commands: Commands,
 ) {
     for event in events.read() {
         if let CollideWith::Waypoint(entity) = event.other {
             scorebard.score += 1;
-            let mut text = query.single_mut();
-            text.sections[1].value = scorebard.score.to_string();
             commands.entity(entity).despawn();
         }
     }
+}
+
+pub fn restart_event_handler(
+    events: EventReader<RestartEvent>,
+    mut scorebard: ResMut<ScoreBoard>,
+) {
+    scorebard.score = 0;
 }
