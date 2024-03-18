@@ -12,9 +12,10 @@
  * - https://www.youtube.com/watch?v=STyY26a_dPY
  */
 
+use bevy::ecs::event;
 use bevy::prelude::*;
 
-use crate::physics::CollideEvent;
+use crate::physics::{CollideEvent, CollideWith};
 use crate::player::*;
 
 pub fn player_movement(mut query: Query<(&mut RigidBody, &Controller, &mut Player)>) {
@@ -45,14 +46,16 @@ pub fn player_movement(mut query: Query<(&mut RigidBody, &Controller, &mut Playe
 }
 
 pub fn collide_event_handler(
-    events: EventReader<CollideEvent>,
+    mut events: EventReader<CollideEvent>,
     mut query: Query<&mut Player>,
     mut next_state: ResMut<NextState<ApplicationState>>,
 ) {
-    if !events.is_empty() {
-        info!("End of Game !");
-        let mut player = query.single_mut();
-        player.attitude = PlayerAttitude::InWall;
-        next_state.set(ApplicationState::GameEnding);
+    for event in events.read() {
+        if let CollideWith::Obstacle = event.other {
+            info!("End of Game !");
+            let mut player = query.single_mut();
+            player.attitude = PlayerAttitude::InWall;
+            next_state.set(ApplicationState::GameEnding);
+        }
     }
 }

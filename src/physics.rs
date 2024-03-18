@@ -2,11 +2,13 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
+use std::default;
+
 use bevy::math::bounding::{Aabb2d, IntersectsVolume};
 use bevy::{prelude::*};
 
 use crate::player::Player;
-use crate::world::Obstacle;
+use crate::world::{Obstacle, Waypoint};
 use crate::ApplicationState;
 
 #[derive(Component)]
@@ -30,7 +32,15 @@ impl Default for RigidBody {
 }
 
 #[derive(Event, Default)]
-pub struct CollideEvent;
+pub struct CollideEvent{
+    pub other:CollideWith
+}
+
+#[derive(Default)]
+pub enum CollideWith {
+    #[default] Obstacle,
+    Waypoint(Entity),
+}
 
 pub struct PhysicsPlugin;
 
@@ -67,16 +77,17 @@ fn bodies_movement(mut query: Query<(&mut RigidBody, &mut Transform)>, time: Res
 
 fn collision(
     mut obstacles_query: Query<&Transform, (Without<Player>, With<Collider>)>,
+    mut waypoint_query: Query<(&Transform, Entity), (Without<Player>, With<Waypoint>)>,
     mut player_query: Query<&Transform, With<Player>>,
     mut collision_events: EventWriter<CollideEvent>,
     gizmos: Gizmos,
 ) {
     let player_transform = player_query.single_mut();
+    let player_box = Aabb2d::new(
+        player_transform.translation.truncate(),
+        player_transform.scale.truncate() * 6.0,
+    );
     for obstacle in obstacles_query.iter_mut() {
-        let player_box = Aabb2d::new(
-            player_transform.translation.truncate(),
-            player_transform.scale.truncate() * 6.0,
-        );
         let obstacle_box = Aabb2d::new(
             obstacle.translation.truncate(),
             obstacle.scale.truncate() / 2.0,
@@ -87,5 +98,17 @@ fn collision(
         }
 
         // gizmos.rect_2d(player_box.center(), 0.0, player_box.half_size() *2.0, Color::GRAY);
+    }
+
+    for (waypoint, entity) in waypoint_query.iter() {
+        let waypoint_box = Aabb2d::new(
+            waypoint.translation.truncate(),
+            waypoint.scale.truncate() / 2.0,
+        );
+
+        if player_box.intersects(&waypoint_box) {
+            collision_events.send(CollideEvent{other:CollideWith::Waypoint(entity)});
+            // collision_events.send_default();
+        }
     }
 }

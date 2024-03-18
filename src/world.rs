@@ -2,10 +2,10 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
-use bevy::prelude::*;
+use bevy::{prelude::*, text};
 
 use crate::{
-    physics::{Collider, RigidBody},
+    physics::{Collider, RigidBody, CollideEvent, CollideWith},
     ApplicationState,
 };
 
@@ -41,6 +41,17 @@ struct ObstacleDespawnTimer {
     timer: Timer,
 }
 
+#[derive(Resource)]
+struct ScoreBoard {
+    score: u32,
+}
+
+#[derive(Component)]
+struct ScoreBoardUi;
+
+#[derive(Component)]
+pub struct Waypoint;
+
 pub struct WorldPlugin;
 
 impl Plugin for WorldPlugin {
@@ -51,6 +62,7 @@ impl Plugin for WorldPlugin {
         app.insert_resource(ObstacleDespawnTimer {
             timer: Timer::from_seconds(OBSTACLE_DESPAWN_SPEED, TimerMode::Repeating),
         });
+        app.insert_resource(ScoreBoard{score:0});
         app.add_systems(Startup, setup_world);
         app.add_systems(
             FixedUpdate,
@@ -60,10 +72,15 @@ impl Plugin for WorldPlugin {
             Update,
             clear_world.run_if(in_state(ApplicationState::GameEnding))
         );
+        app.add_systems(
+            Update,
+            collide_event_handler.run_if(in_state(ApplicationState::InGame)),
+        );
     }
 }
 
 fn setup_world(mut commands: Commands) {
+    // Top world border
     commands.spawn((
         SpriteBundle {
             transform: Transform {
@@ -80,6 +97,7 @@ fn setup_world(mut commands: Commands) {
         Collider,
     ));
 
+    // Bottom world border
     commands.spawn((
         SpriteBundle {
             transform: Transform {
@@ -94,6 +112,22 @@ fn setup_world(mut commands: Commands) {
             ..default()
         },
         Collider,
+    ));
+
+    // Spawn Scoreboard
+    commands.spawn((
+        Text2dBundle {
+            text: Text::from_sections([
+                TextSection::new("Score: ", TextStyle { ..default() }),
+                TextSection::from_style(TextStyle { ..default() }),
+            ]),
+            transform: Transform {
+                translation: Vec3::new(WORLD_LEFT +  80.0, WORLD_TOP - 80.0, 0.0),
+                ..default()
+            },
+            ..default()
+        },
+        ScoreBoardUi,
     ));
 }
 
@@ -197,4 +231,42 @@ fn spawn_obstacle(commands: &mut Commands, gap_position: f32) {
             ..Default::default()
         },
     ));
+
+    commands.spawn((
+        SpriteBundle {
+            transform: Transform {
+                translation: Vec3::new(WORLD_RIGHT, WORLD_BOTTOM + gap_position, 0.0),
+                scale: Vec3::new(OBSTACLE_WIDTH, OBSTACLE_GAP_SIZE, 0.0),
+                ..default()
+            },
+            sprite: Sprite {
+                color: Color::rgba(0.75, 0.75, 0.75, 0.5),
+                ..default()
+            },
+            ..default()
+        },
+        RigidBody {
+            // Constant speed, no gravity
+            position: Vec2::new(WORLD_RIGHT, WORLD_BOTTOM + gap_position),
+            velocity: Vec2::new(-OBSTACLE_SPEED, 0.0),
+            ..Default::default()
+        },
+        Waypoint,
+    ));
+}
+
+fn collide_event_handler(
+    mut events: EventReader<CollideEvent>,
+    mut scorebard: ResMut<ScoreBoard>,
+    mut query: Query<&mut Text, With<ScoreBoardUi>>,
+    mut commands: Commands,
+) {
+    for event in events.read() {
+        if let CollideWith::Waypoint(entity) = event.other {
+            scorebard.score += 1;
+            let mut text = query.single_mut();
+            text.sections[1].value = scorebard.score.to_string();
+            commands.entity(entity).despawn();
+        }
+    }
 }
