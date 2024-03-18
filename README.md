@@ -7,3 +7,10 @@
 - [bevy engine](https://bevyengine.org) as game engine.
 - [bevy game template](https://github.com/NiklasEi/bevy_game_template/tree/main?tab=readme-ov-file) as tutorial to build and release the game.
 - [ChatGPT](https://chat.openai.com) free edition for the game lore.
+
+## Project management
+This repository follow the [Semantic versioning](https://semver.org) scheme.
+The "user-experience" is used as a "public API". This definition id deliberately vague.
+
+## License
+Licensed under MIT license ([LICENSE-MIT](LICENSE.txt) or http://opensource.org/licenses/MIT)
