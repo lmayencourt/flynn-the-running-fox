@@ -3,7 +3,6 @@
  */
 
 use bevy::prelude::*;
-use rand::prelude::*;
 
 use crate::{
     physics::{Collider, RigidBody},

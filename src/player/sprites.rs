@@ -2,7 +2,7 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
-use bevy::{prelude::*, transform};
+use bevy::{prelude::*};
 
 use crate::player::*;
 

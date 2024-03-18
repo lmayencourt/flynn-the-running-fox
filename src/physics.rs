@@ -2,8 +2,8 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
-use bevy::math::bounding::{Aabb2d, BoundingVolume, IntersectsVolume};
-use bevy::{gizmos, prelude::*};
+use bevy::math::bounding::{Aabb2d, IntersectsVolume};
+use bevy::{prelude::*};
 
 use crate::player::Player;
 use crate::world::Obstacle;
@@ -69,7 +69,7 @@ fn collision(
     mut obstacles_query: Query<&Transform, With<Obstacle>>,
     mut player_query: Query<&Transform, With<Player>>,
     mut collision_events: EventWriter<CollideEvent>,
-    mut gizmos: Gizmos,
+    gizmos: Gizmos,
 ) {
     let player_transform = player_query.single_mut();
     for obstacle in obstacles_query.iter_mut() {

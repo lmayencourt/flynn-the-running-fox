@@ -3,7 +3,6 @@
  */
 
 use bevy::prelude::*;
-use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
 mod physics;
 mod player;
