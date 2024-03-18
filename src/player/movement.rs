@@ -39,6 +39,7 @@ pub fn player_movement(mut query: Query<(&mut RigidBody, &Controller, &mut Playe
             player.state = PlayerState::Dead;
             body.velocity = Vec2::ZERO;
             body.acceleration = Vec2::ZERO;
+            body.position.y = 0.0;
         }
     }
 }
