@@ -45,7 +45,7 @@ impl Plugin for PlayerPlugin {
         app.add_systems(Startup, setup);
         app.add_systems(
             Update,
-            restart_event_handler.run_if(in_state(ApplicationState::GameEnd))
+            restart_event_handler
         );
         app.add_systems(
             FixedUpdate,
@@ -53,7 +53,9 @@ impl Plugin for PlayerPlugin {
         );
         app.add_systems(
             FixedUpdate,
-            movement::player_movement.run_if(in_state(ApplicationState::InGame)),
+            movement::player_movement
+                .after(controller::keyboard_inputs)
+                .run_if(in_state(ApplicationState::InGame)),
         );
         app.add_systems(
             FixedUpdate,
@@ -110,6 +112,7 @@ pub fn restart_event_handler(
     mut query: Query<&mut Player>,
 ) {
     if !events.is_empty() {
+        info!("Restart Game!");
         let mut player = query.single_mut();
         player.attitude = PlayerAttitude::InAir;
     }

@@ -65,7 +65,7 @@ impl Plugin for WorldPlugin {
         app.insert_resource(ScoreBoard{score:0});
         app.add_systems(Startup, setup_world);
         app.add_systems(
-            FixedUpdate,
+            Update,
             update_world.run_if(in_state(ApplicationState::InGame)),
         );
         app.add_systems(
