@@ -66,7 +66,7 @@ fn bodies_movement(mut query: Query<(&mut RigidBody, &mut Transform)>, time: Res
 }
 
 fn collision(
-    mut obstacles_query: Query<&Transform, With<Obstacle>>,
+    mut obstacles_query: Query<&Transform, (Without<Player>, With<Collider>)>,
     mut player_query: Query<&Transform, With<Player>>,
     mut collision_events: EventWriter<CollideEvent>,
     gizmos: Gizmos,

@@ -51,6 +51,7 @@ impl Plugin for WorldPlugin {
         app.insert_resource(ObstacleDespawnTimer {
             timer: Timer::from_seconds(OBSTACLE_DESPAWN_SPEED, TimerMode::Repeating),
         });
+        app.add_systems(Startup, setup_world);
         app.add_systems(
             FixedUpdate,
             update_world.run_if(in_state(ApplicationState::InGame)),
@@ -60,6 +61,40 @@ impl Plugin for WorldPlugin {
             clear_world.run_if(in_state(ApplicationState::GameEnding))
         );
     }
+}
+
+fn setup_world(mut commands: Commands) {
+    commands.spawn((
+        SpriteBundle {
+            transform: Transform {
+                translation: Vec3::new(WORLD_LEFT + WORLD_WIDTH/2.0, WORLD_TOP, 0.0),
+                scale: Vec3::new(WORLD_WIDTH, OBSTACLE_WIDTH, 0.0),
+                ..default()
+            },
+            sprite: Sprite {
+                color: Color::rgb(1.0, 1.0, 1.0),
+                ..default()
+            },
+            ..default()
+        },
+        Collider,
+    ));
+
+    commands.spawn((
+        SpriteBundle {
+            transform: Transform {
+                translation: Vec3::new(WORLD_LEFT + WORLD_WIDTH/2.0, WORLD_BOTTOM, 0.0),
+                scale: Vec3::new(WORLD_WIDTH, OBSTACLE_WIDTH, 0.0),
+                ..default()
+            },
+            sprite: Sprite {
+                color: Color::rgb(1.0, 1.0, 1.0),
+                ..default()
+            },
+            ..default()
+        },
+        Collider,
+    ));
 }
 
 fn update_world(
