@@ -2,17 +2,15 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
-use bevy::{
-    prelude::*,
-};
+use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
 mod physics;
 mod player;
 mod world;
 
-use player::PlayerPlugin;
 use physics::PhysicsPlugin;
+use player::PlayerPlugin;
 use world::WorldPlugin;
 
 #[derive(States, Debug, Clone, PartialEq, Eq, Hash)]
@@ -41,12 +39,8 @@ fn main() {
         .run();
 }
 
-fn menu_setup (
-    mut commands: Commands,
-) {
-    let text_style = TextStyle {
-        ..default()
-    };
+fn menu_setup(mut commands: Commands) {
+    let text_style = TextStyle { ..default() };
 
     commands.spawn((
         Text2dBundle {
@@ -68,11 +62,11 @@ fn menu_control(
             if keyboard_input.pressed(KeyCode::Space) {
                 next_state.set(ApplicationState::InGame);
             }
-        },
+        }
         ApplicationState::InGame => {
             let mut text = query.single_mut();
             text.sections[0].value = "".to_string();
-        },
+        }
         ApplicationState::GameEnd => {
             let mut text = query.single_mut();
             text.sections[0].value = "You died...".to_string();
@@ -80,6 +74,6 @@ fn menu_control(
             if keyboard_input.pressed(KeyCode::Space) {
                 next_state.set(ApplicationState::InGame);
             }
-        },
+        }
     }
 }

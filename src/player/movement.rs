@@ -14,12 +14,10 @@
 
 use bevy::prelude::*;
 
-use crate::physics::{CollideEvent};
+use crate::physics::CollideEvent;
 use crate::player::*;
 
-pub fn player_movement(
-    mut query: Query<(&mut RigidBody, &Controller, &mut Player)>,
-) {
+pub fn player_movement(mut query: Query<(&mut RigidBody, &Controller, &mut Player)>) {
     let (mut body, controller, mut player) = query.single_mut();
 
     debug!("Player state {:?}", player.state);

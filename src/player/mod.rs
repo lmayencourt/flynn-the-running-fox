@@ -8,7 +8,10 @@ pub mod controller;
 pub mod movement;
 pub mod sprites;
 
-use crate::{physics::{Collider, RigidBody}, ApplicationState};
+use crate::{
+    physics::{Collider, RigidBody},
+    ApplicationState,
+};
 
 use controller::*;
 use sprites::*;
@@ -40,12 +43,18 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup);
-        app.add_systems(FixedUpdate, controller::keyboard_inputs
-            .run_if(in_state(ApplicationState::InGame)));
-        app.add_systems(FixedUpdate, movement::player_movement
-            .run_if(in_state(ApplicationState::InGame)));
-        app.add_systems(FixedUpdate, movement::collide_event_handler
-            .run_if(in_state(ApplicationState::InGame)));
+        app.add_systems(
+            FixedUpdate,
+            controller::keyboard_inputs.run_if(in_state(ApplicationState::InGame)),
+        );
+        app.add_systems(
+            FixedUpdate,
+            movement::player_movement.run_if(in_state(ApplicationState::InGame)),
+        );
+        app.add_systems(
+            FixedUpdate,
+            movement::collide_event_handler.run_if(in_state(ApplicationState::InGame)),
+        );
         app.add_systems(Update, sprites::animate_sprite);
     }
 }

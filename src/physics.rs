@@ -37,10 +37,14 @@ pub struct PhysicsPlugin;
 impl Plugin for PhysicsPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<CollideEvent>();
-        app.add_systems(FixedUpdate, bodies_movement
-            .run_if(in_state(ApplicationState::InGame)));
-        app.add_systems(FixedUpdate, collision
-            .run_if(in_state(ApplicationState::InGame)));
+        app.add_systems(
+            FixedUpdate,
+            bodies_movement.run_if(in_state(ApplicationState::InGame)),
+        );
+        app.add_systems(
+            FixedUpdate,
+            collision.run_if(in_state(ApplicationState::InGame)),
+        );
     }
 }
 
