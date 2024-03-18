@@ -18,6 +18,8 @@ use sprites::*;
 
 pub const SPRITE_HEIGHT: f32 = 15.0;
 pub const SPRITE_WIDTH: f32 = 24.0;
+pub const SPRITE_IDLE_IDX: (usize, usize) = (0, 5);
+pub const SPRITE_RUN_IDX: (usize, usize) = (6, 11);
 
 #[derive(Component)]
 pub struct Player {
@@ -27,6 +29,7 @@ pub struct Player {
 
 #[derive(Debug)]
 enum PlayerState {
+    Idle,
     Running,
     Jumping,
     Dead,
@@ -70,11 +73,10 @@ fn setup(
     asset_server: Res<AssetServer>,
     mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
 ) {
-    let texture = asset_server.load("snow-fox.png");
+    let texture = asset_server.load("snow-fox-sprites.png");
     let layout =
-        TextureAtlasLayout::from_grid(Vec2::new(SPRITE_WIDTH, SPRITE_HEIGHT), 6, 1, None, None);
+        TextureAtlasLayout::from_grid(Vec2::new(SPRITE_WIDTH, SPRITE_HEIGHT), 6, 2, None, None);
     let texture_atlas_layout = texture_atlas_layouts.add(layout);
-    // Use only the subset of sprites in the sheet that make up the run animation
     let animation_indices = AnimationIndices { first: 0, last: 5 };
     commands.spawn(Camera2dBundle::default());
     commands.spawn((
@@ -90,7 +92,7 @@ fn setup(
         animation_indices,
         AnimationTimer(Timer::from_seconds(0.1, TimerMode::Repeating)),
         Player {
-            state: PlayerState::Running,
+            state: PlayerState::Idle,
             attitude: PlayerAttitude::InAir,
             // jump_timer: Timer::from_seconds(0.4, TimerMode::Repeating),
         },

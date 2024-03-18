@@ -29,7 +29,7 @@ pub fn animate_sprite(
         timer.tick(time.delta());
 
         match player.state {
-            PlayerState::Running => {
+            PlayerState::Idle => {
                 transform.rotation = Quat::from_rotation_x(0.0);
                 if timer.just_finished() {
                     atlas.index = if atlas.index == indices.last {
@@ -39,13 +39,27 @@ pub fn animate_sprite(
                     };
                 }
             }
+            PlayerState::Running => {
+                transform.rotation = Quat::from_rotation_x(0.0);
+                if timer.just_finished() {
+                    atlas.index = if atlas.index < SPRITE_RUN_IDX.0 {
+                        SPRITE_RUN_IDX.0
+                    } else if atlas.index >= SPRITE_RUN_IDX.1 {
+                        SPRITE_IDLE_IDX.0
+                    } else {
+                        atlas.index + 1
+                    }
+                }
+            }
             PlayerState::Jumping => {
-                atlas.index = 3;
+                atlas.index = 9;
             }
             PlayerState::Dead => {
-                atlas.index = 0;
+                atlas.index = 6;
                 transform.rotation = Quat::from_rotation_x(std::f32::consts::PI);
             }
         }
+
+        debug!("indice {}", atlas.index);
     }
 }
