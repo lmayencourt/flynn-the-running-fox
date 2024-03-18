@@ -1,1 +1,3 @@
 /target
+# Mac OSX stuff
+.DS_Store
