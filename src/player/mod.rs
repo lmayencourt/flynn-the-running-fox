@@ -45,6 +45,7 @@ pub struct PlayerPlugin;
 
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
+        app.insert_resource(sprites::AnimationUpDown(true));
         app.add_systems(Startup, setup);
         app.add_systems(
             Update,
