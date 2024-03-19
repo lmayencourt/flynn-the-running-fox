@@ -63,6 +63,10 @@ pub fn setup(
     let accel = module.lit(Vec3::new(-20., -3., 0.));
     let update_accel = AccelModifier::new(accel);
 
+    // Set the size of the particules
+    let size = module.lit(2.5);
+    let init_size = SetAttributeModifier::new(Attribute::SIZE, size);
+
     // Create the effect asset
     let effect = EffectAsset::new(
         // Maximum number of particles alive at a time
@@ -76,6 +80,7 @@ pub fn setup(
     .init(init_pos)
     .init(init_vel)
     .init(init_lifetime)
+    .init(init_size)
     .update(update_accel)
     // Render the particles with a color gradient over their
     // lifetime. This maps the gradient key 0 to the particle spawn
