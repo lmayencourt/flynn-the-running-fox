@@ -3,6 +3,8 @@
  */
 
 use bevy::prelude::*;
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
+use bevy_hanabi::prelude::*;
 
 mod physics;
 mod player;
@@ -32,6 +34,7 @@ fn main() {
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest())) // prevents blurry sprites
         // .add_plugins(WorldInspectorPlugin::new())
         .add_systems(Update, bevy::window::close_on_esc)
+        .add_plugins(HanabiPlugin)
         // Custom plugin and systems
         .insert_state(ApplicationState::LandingScreen)
         .add_event::<RestartEvent>()

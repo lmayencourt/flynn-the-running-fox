@@ -2,12 +2,16 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
-use bevy::{prelude::*, text};
+use bevy::prelude::*;
 
 use crate::{
     physics::{Collider, RigidBody, CollideEvent, CollideWith},
     ApplicationState, RestartEvent
 };
+
+mod wind;
+
+use wind::*;
 
 /// World size definition
 const WORLD_HEIGHT: f32 = 800.0;
@@ -79,6 +83,11 @@ impl Plugin for WorldPlugin {
         app.add_systems(
             Update,
             restart_event_handler.run_if(in_state(ApplicationState::GameEnd))
+        );
+        // Wind
+        app.add_systems(
+            Startup,
+            wind::setup
         );
     }
 }
