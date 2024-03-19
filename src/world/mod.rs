@@ -83,7 +83,7 @@ impl Plugin for WorldPlugin {
             restart_event_handler.run_if(in_state(ApplicationState::GameEnd)),
         );
         // Wind
-        app.add_systems(Startup, wind::setup);
+        app.add_systems(Startup, wind::spawn_particle_system);
     }
 }
 
