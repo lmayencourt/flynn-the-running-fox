@@ -9,7 +9,7 @@
 use bevy::prelude::*;
 use bevy_particle_systems::*;
 
-use super::{WORLD_BOTTOM, WORLD_HEIGHT, WORLD_RIGHT, WORLD_TOP, WORLD_WIDTH};
+use super::{WORLD_BOTTOM, WORLD_HEIGHT, WORLD_RIGHT, WORLD_WIDTH};
 
 pub fn spawn_particle_system(mut commands: Commands) {
     commands
