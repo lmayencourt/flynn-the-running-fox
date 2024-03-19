@@ -11,7 +11,6 @@ use crate::{
 
 mod wind;
 
-use wind::*;
 
 /// World size definition
 const WORLD_HEIGHT: f32 = 800.0;
@@ -147,7 +146,7 @@ fn setup_world(mut commands: Commands) {
 fn update_world(
     mut commands: Commands,
     mut obstacles_query: Query<(&Transform, Entity), With<Obstacle>>,
-    mut scorebard: ResMut<ScoreBoard>,
+    scorebard: ResMut<ScoreBoard>,
     mut query: Query<&mut Text, With<ScoreBoardUi>>,
     mut spawn_timer: ResMut<ObstacleSpawnTimer>,
     time: Res<Time>,
@@ -176,7 +175,7 @@ fn update_world(
 
 fn clear_world(
     mut commands: Commands,
-    mut query: Query<Entity, With<Obstacle>>,
+    query: Query<Entity, With<Obstacle>>,
     mut despawn_timer: ResMut<ObstacleDespawnTimer>,
     mut next_state: ResMut<NextState<ApplicationState>>,
     time: Res<Time>,
@@ -286,8 +285,8 @@ fn collide_event_handler(
     }
 }
 
-pub fn restart_event_handler(
-    events: EventReader<RestartEvent>,
+fn restart_event_handler(
+    _events: EventReader<RestartEvent>,
     mut scorebard: ResMut<ScoreBoard>,
 ) {
     scorebard.score = 0;

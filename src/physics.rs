@@ -2,13 +2,12 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
-use std::default;
 
 use bevy::math::bounding::{Aabb2d, IntersectsVolume};
 use bevy::{prelude::*};
 
 use crate::player::Player;
-use crate::world::{Obstacle, Waypoint};
+use crate::world::{Waypoint};
 use crate::ApplicationState;
 
 #[derive(Component)]
@@ -77,10 +76,10 @@ fn bodies_movement(mut query: Query<(&mut RigidBody, &mut Transform)>, time: Res
 
 fn collision(
     mut obstacles_query: Query<&Transform, (Without<Player>, With<Collider>)>,
-    mut waypoint_query: Query<(&Transform, Entity), (Without<Player>, With<Waypoint>)>,
+    waypoint_query: Query<(&Transform, Entity), (Without<Player>, With<Waypoint>)>,
     mut player_query: Query<&Transform, With<Player>>,
     mut collision_events: EventWriter<CollideEvent>,
-    gizmos: Gizmos,
+    // gizmos: Gizmos,
 ) {
     let player_transform = player_query.single_mut();
     let player_box = Aabb2d::new(

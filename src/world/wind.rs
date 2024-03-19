@@ -17,7 +17,7 @@
 use bevy::prelude::*;
 use bevy_hanabi::prelude::*;
 
-use super::{WORLD_BOTTOM, WORLD_HEIGHT, WORLD_RIGHT, WORLD_TOP, WORLD_WIDTH};
+use super::{WORLD_HEIGHT, WORLD_RIGHT, WORLD_TOP, WORLD_WIDTH};
 
 pub fn setup(
     mut commands: Commands,

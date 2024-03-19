@@ -12,7 +12,6 @@
  * - https://www.youtube.com/watch?v=STyY26a_dPY
  */
 
-use bevy::ecs::event;
 use bevy::prelude::*;
 
 use crate::physics::{CollideEvent, CollideWith};
