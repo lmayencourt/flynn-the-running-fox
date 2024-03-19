@@ -47,10 +47,7 @@ impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(sprites::AnimationUpDown(true));
         app.add_systems(Startup, setup);
-        app.add_systems(
-            Update,
-            restart_event_handler
-        );
+        app.add_systems(Update, restart_event_handler);
         app.add_systems(
             FixedUpdate,
             controller::keyboard_inputs.run_if(in_state(ApplicationState::InGame)),
@@ -110,10 +107,7 @@ fn setup(
     ));
 }
 
-pub fn restart_event_handler(
-    events: EventReader<RestartEvent>,
-    mut query: Query<&mut Player>,
-) {
+pub fn restart_event_handler(events: EventReader<RestartEvent>, mut query: Query<&mut Player>) {
     if !events.is_empty() {
         info!("Restart Game!");
         let mut player = query.single_mut();

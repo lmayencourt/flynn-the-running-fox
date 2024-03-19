@@ -36,15 +36,19 @@ pub fn setup(
     // On spawn, randomly initialize the position of the particle
     // to be over the surface of a sphere
     let init_pos = SetPositionSphereModifier {
-          center: module.lit(Vec3::new(WORLD_RIGHT + WORLD_WIDTH/8.0, WORLD_TOP - WORLD_HEIGHT/4.0, 0.0)),
-          radius: module.lit(WORLD_HEIGHT/2.0),
+        center: module.lit(Vec3::new(
+            WORLD_RIGHT + WORLD_WIDTH / 8.0,
+            WORLD_TOP - WORLD_HEIGHT / 4.0,
+            0.0,
+        )),
+        radius: module.lit(WORLD_HEIGHT / 2.0),
         dimension: ShapeDimension::Surface,
     };
 
     // Also initialize a radial initial velocity to 6 units/sec
     // away from the (same) sphere center.
     let init_vel = SetVelocitySphereModifier {
-    //   center: module.lit(Vec3::new(WORLD_RIGHT, WORLD_BOTTOM + WORLD_HEIGHT/2.0, 0.0)),
+        //   center: module.lit(Vec3::new(WORLD_RIGHT, WORLD_BOTTOM + WORLD_HEIGHT/2.0, 0.0)),
         center: module.lit(Vec3::ZERO),
         speed: module.lit(30.),
     };
@@ -53,8 +57,7 @@ pub fn setup(
     // the time for which it's simulated and rendered. This modifier
     // is almost always required, otherwise the particles won't show.
     let lifetime = module.lit(30.); // literal value "10.0"
-    let init_lifetime = SetAttributeModifier::new(
-        Attribute::LIFETIME, lifetime);
+    let init_lifetime = SetAttributeModifier::new(Attribute::LIFETIME, lifetime);
 
     // Every frame, add a gravity-like acceleration downward
     let accel = module.lit(Vec3::new(-20., -3., 0.));
@@ -67,7 +70,7 @@ pub fn setup(
         // Spawn at a rate of 10 particles per second
         Spawner::rate(10.0.into()),
         // Move the expression module into the asset
-        module
+        module,
     )
     .with_name("TheWind")
     .init(init_pos)
@@ -82,10 +85,9 @@ pub fn setup(
     // Insert into the asset system
     let effect_handle = effects.add(effect);
 
-    commands
-        .spawn(ParticleEffectBundle {
-            effect: ParticleEffect::new(effect_handle),
-            transform: Transform::from_translation(Vec3::Y),
-            ..Default::default()
-        });
+    commands.spawn(ParticleEffectBundle {
+        effect: ParticleEffect::new(effect_handle),
+        transform: Transform::from_translation(Vec3::Y),
+        ..Default::default()
+    });
 }

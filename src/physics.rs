@@ -2,12 +2,11 @@
  * Copyright (c) 2024 Louis Mayencourt
  */
 
-
 use bevy::math::bounding::{Aabb2d, IntersectsVolume};
-use bevy::{prelude::*};
+use bevy::prelude::*;
 
 use crate::player::Player;
-use crate::world::{Waypoint};
+use crate::world::Waypoint;
 use crate::ApplicationState;
 
 #[derive(Component)]
@@ -31,13 +30,14 @@ impl Default for RigidBody {
 }
 
 #[derive(Event, Default)]
-pub struct CollideEvent{
-    pub other:CollideWith
+pub struct CollideEvent {
+    pub other: CollideWith,
 }
 
 #[derive(Default)]
 pub enum CollideWith {
-    #[default] Obstacle,
+    #[default]
+    Obstacle,
     Waypoint(Entity),
 }
 
@@ -106,7 +106,9 @@ fn collision(
         );
 
         if player_box.intersects(&waypoint_box) {
-            collision_events.send(CollideEvent{other:CollideWith::Waypoint(entity)});
+            collision_events.send(CollideEvent {
+                other: CollideWith::Waypoint(entity),
+            });
             // collision_events.send_default();
         }
     }

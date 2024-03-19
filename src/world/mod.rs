@@ -5,12 +5,11 @@
 use bevy::prelude::*;
 
 use crate::{
-    physics::{Collider, RigidBody, CollideEvent, CollideWith},
-    ApplicationState, RestartEvent
+    physics::{CollideEvent, CollideWith, Collider, RigidBody},
+    ApplicationState, RestartEvent,
 };
 
 mod wind;
-
 
 /// World size definition
 const WORLD_HEIGHT: f32 = 800.0;
@@ -65,7 +64,7 @@ impl Plugin for WorldPlugin {
         app.insert_resource(ObstacleDespawnTimer {
             timer: Timer::from_seconds(OBSTACLE_DESPAWN_SPEED, TimerMode::Repeating),
         });
-        app.insert_resource(ScoreBoard{score:0});
+        app.insert_resource(ScoreBoard { score: 0 });
         app.add_systems(Startup, setup_world);
         app.add_systems(
             Update,
@@ -73,7 +72,7 @@ impl Plugin for WorldPlugin {
         );
         app.add_systems(
             Update,
-            clear_world.run_if(in_state(ApplicationState::GameEnding))
+            clear_world.run_if(in_state(ApplicationState::GameEnding)),
         );
         app.add_systems(
             Update,
@@ -81,13 +80,10 @@ impl Plugin for WorldPlugin {
         );
         app.add_systems(
             Update,
-            restart_event_handler.run_if(in_state(ApplicationState::GameEnd))
+            restart_event_handler.run_if(in_state(ApplicationState::GameEnd)),
         );
         // Wind
-        app.add_systems(
-            Startup,
-            wind::setup
-        );
+        app.add_systems(Startup, wind::setup);
     }
 }
 
@@ -96,7 +92,7 @@ fn setup_world(mut commands: Commands) {
     commands.spawn((
         SpriteBundle {
             transform: Transform {
-                translation: Vec3::new(WORLD_LEFT + WORLD_WIDTH/2.0, WORLD_TOP, 0.0),
+                translation: Vec3::new(WORLD_LEFT + WORLD_WIDTH / 2.0, WORLD_TOP, 0.0),
                 scale: Vec3::new(WORLD_WIDTH, OBSTACLE_WIDTH, 0.0),
                 ..default()
             },
@@ -113,7 +109,7 @@ fn setup_world(mut commands: Commands) {
     commands.spawn((
         SpriteBundle {
             transform: Transform {
-                translation: Vec3::new(WORLD_LEFT + WORLD_WIDTH/2.0, WORLD_BOTTOM, 0.0),
+                translation: Vec3::new(WORLD_LEFT + WORLD_WIDTH / 2.0, WORLD_BOTTOM, 0.0),
                 scale: Vec3::new(WORLD_WIDTH, OBSTACLE_WIDTH, 0.0),
                 ..default()
             },
@@ -134,7 +130,7 @@ fn setup_world(mut commands: Commands) {
                 TextSection::from_style(TextStyle { ..default() }),
             ]),
             transform: Transform {
-                translation: Vec3::new(WORLD_LEFT +  80.0, WORLD_TOP - 80.0, 0.0),
+                translation: Vec3::new(WORLD_LEFT + 80.0, WORLD_TOP - 80.0, 0.0),
                 ..default()
             },
             ..default()
@@ -285,9 +281,6 @@ fn collide_event_handler(
     }
 }
 
-fn restart_event_handler(
-    _events: EventReader<RestartEvent>,
-    mut scorebard: ResMut<ScoreBoard>,
-) {
+fn restart_event_handler(_events: EventReader<RestartEvent>, mut scorebard: ResMut<ScoreBoard>) {
     scorebard.score = 0;
 }
