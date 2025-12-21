@@ -3,12 +3,15 @@
  */
 
 use bevy::prelude::*;
+use bevy_embedded_assets::EmbeddedAssetPlugin;
 use bevy_particle_systems::ParticleSystemPlugin;
 
+mod audio;
 mod physics;
 mod player;
 mod world;
 
+use audio::AudioPlugin;
 use physics::PhysicsPlugin;
 use player::PlayerPlugin;
 use world::WorldPlugin;
@@ -30,9 +33,25 @@ pub struct RestartEvent;
 fn main() {
     println!("Flappy bird made with Bevy!");
     App::new()
-        .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest())) // prevents blurry sprites
+        .add_plugins(EmbeddedAssetPlugin::default())
+        .add_plugins(DefaultPlugins
+            .set(ImagePlugin::default_nearest()) // prevents blurry sprites
+            .set(WindowPlugin {
+                    primary_window: Some(Window {
+                        title: "Bevy game".to_string(), // ToDo
+                        // Bind to canvas included in `index.html`
+                        canvas: Some("#bevy".to_owned()),
+                        fit_canvas_to_parent: true,
+                        // Tells wasm not to override default event handling, like F5 and Ctrl+R
+                        prevent_default_event_handling: false,
+                        ..default()
+                    }),
+                    ..default()
+                })
+            )
         // .add_plugins(WorldInspectorPlugin::new())
-        .add_systems(Update, bevy::window::close_on_esc)
+        // .add_systems(Update, bevy::window::clo)
+        // .add_systems(Update, bevy::window::close_on_esc)
         .add_plugins(ParticleSystemPlugin)
         // Custom plugin and systems
         .insert_state(ApplicationState::LandingScreen)
@@ -42,6 +61,7 @@ fn main() {
         .add_plugins(WorldPlugin)
         .add_plugins(PlayerPlugin)
         .add_plugins(PhysicsPlugin)
+        .add_plugins(AudioPlugin)
         .run();
 }
 

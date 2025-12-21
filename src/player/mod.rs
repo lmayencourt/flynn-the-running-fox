@@ -16,8 +16,8 @@ use crate::{
 use controller::*;
 use sprites::*;
 
-pub const SPRITE_HEIGHT: f32 = 15.0;
-pub const SPRITE_WIDTH: f32 = 24.0;
+pub const SPRITE_HEIGHT: u32 = 15;
+pub const SPRITE_WIDTH: u32 = 24;
 pub const SPRITE_IDLE_IDX: (usize, usize) = (0, 5);
 pub const SPRITE_RUN_IDX: (usize, usize) = (6, 11);
 
@@ -71,9 +71,9 @@ fn setup(
     asset_server: Res<AssetServer>,
     mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
 ) {
-    let texture = asset_server.load("snow-fox-sprites.png");
+    let texture = asset_server.load("embedded://snow-fox-sprites.png");
     let layout =
-        TextureAtlasLayout::from_grid(Vec2::new(SPRITE_WIDTH, SPRITE_HEIGHT), 6, 2, None, None);
+        TextureAtlasLayout::from_grid(UVec2::new(SPRITE_WIDTH, SPRITE_HEIGHT), 6, 2, None, None);
     let texture_atlas_layout = texture_atlas_layouts.add(layout);
     let animation_indices = AnimationIndices { first: 0, last: 5 };
     commands.spawn(Camera2dBundle::default());
