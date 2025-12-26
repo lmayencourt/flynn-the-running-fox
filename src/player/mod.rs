@@ -3,6 +3,7 @@
  */
 
 use bevy::prelude::*;
+use bevy::render::camera::ScalingMode;
 
 pub mod controller;
 pub mod movement;
@@ -76,7 +77,9 @@ fn setup(
         TextureAtlasLayout::from_grid(UVec2::new(SPRITE_WIDTH, SPRITE_HEIGHT), 6, 2, None, None);
     let texture_atlas_layout = texture_atlas_layouts.add(layout);
     let animation_indices = AnimationIndices { first: 0, last: 5 };
-    commands.spawn(Camera2dBundle::default());
+    let mut camera = Camera2dBundle::default();
+    camera.projection.scaling_mode = ScalingMode::FixedVertical(780.0);
+    commands.spawn(camera);
     commands.spawn((
         SpriteSheetBundle {
             texture,
