@@ -178,9 +178,8 @@ fn clear_world(
 ) {
     despawn_timer.timer.tick(time.delta());
     if despawn_timer.timer.finished() {
-        for entity in query.iter() {
+        if let Some(entity) = query.iter().next() {
             commands.entity(entity).despawn();
-            break;
         }
     }
 
