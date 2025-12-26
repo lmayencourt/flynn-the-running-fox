@@ -81,12 +81,17 @@ fn menu_control(
     state: Res<State<ApplicationState>>,
     mut next_state: ResMut<NextState<ApplicationState>>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
+    touches: Res<Touches>,
     mut query: Query<&mut Text, With<MenuText>>,
     mut event: EventWriter<RestartEvent>,
 ) {
     match state.get() {
         ApplicationState::LandingScreen => {
             if keyboard_input.pressed(KeyCode::Space) {
+                next_state.set(ApplicationState::InGame);
+            }
+            let touche = touches.first_pressed_position();
+            if touche.is_some() {
                 next_state.set(ApplicationState::InGame);
             }
         }
@@ -103,6 +108,12 @@ fn menu_control(
             text.sections[0].value = "Press \"Space\" to restart!".to_string();
 
             if keyboard_input.pressed(KeyCode::Space) {
+                next_state.set(ApplicationState::InGame);
+                event.send_default();
+            }
+
+            let touche = touches.first_pressed_position();
+            if touche.is_some() {
                 next_state.set(ApplicationState::InGame);
                 event.send_default();
             }
