@@ -22,7 +22,7 @@ body {
 .game-container {
     /* width: 800px;
     height: 600px; */
-    width: 100%;
+    width: 80%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -61,7 +61,7 @@ body {
 #bevy {
     z-index: 2;
 }</style>
-    <link rel="modulepreload" href="./flynn-39537576e07f773.js" crossorigin="anonymous" integrity="sha384-vdY+2ELzR0Z852Z9Pd/0YpLo4qO4Q9NGMLn2TsT/O1l93lnnUivMCY5TANWzjCTT"><link rel="preload" href="./flynn-39537576e07f773_bg.wasm" crossorigin="anonymous" integrity="sha384-wF8KTwHSCF074vT2ZKTvox7urYZ/URyB8+/fjLvRtnGWo1wA3+ihMM6EnqaSM5YQ" as="fetch" type="application/wasm"></head>
+    <link rel="modulepreload" href="./flynn-52df33192dcd43a.js" crossorigin="anonymous" integrity="sha384-2Kddq5SaRLauK+Qp/et4rkysU6xZinGo+Hh7eGoY2DzybWfv+XhN0gzbGU3MjSPn"><link rel="preload" href="./flynn-52df33192dcd43a_bg.wasm" crossorigin="anonymous" integrity="sha384-X+db4OyKqFERnsEfjewekGt2xie1Y6JkAqGgavGR9wA97Z8Mg4FGii3uaMK9D7Fa" as="fetch" type="application/wasm"></head>
     <body>
         <script>// Insert hack to make sound autoplay on Chrome as soon as the user interacts with the tab:
 // https://developers.google.com/web/updates/2018/11/web-audio-autoplay#moving-forward
@@ -133,8 +133,8 @@ body {
         </div>
     
 <script type="module">
-import init, * as bindings from './flynn-39537576e07f773.js';
-const wasm = await init({ module_or_path: './flynn-39537576e07f773_bg.wasm' });
+import init, * as bindings from './flynn-52df33192dcd43a.js';
+const wasm = await init({ module_or_path: './flynn-52df33192dcd43a_bg.wasm' });
 
 
 window.wasmBindings = bindings;
